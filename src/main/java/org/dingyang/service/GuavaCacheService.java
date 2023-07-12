@@ -29,7 +29,7 @@ public class GuavaCacheService {
                 maximumSize(100).
                 recordStats().
                 expireAfterWrite(60, TimeUnit.SECONDS).
-                removalListener(notification -> System.out.printf("%s:%s 被移除，原因:%s", notification.getKey(), notification.getValue(), notification.getCause())).
+                removalListener(notification -> System.out.printf("%s:%s 被移除，原因:%s\n", notification.getKey(), notification.getValue(), notification.getCause())).
                 build(new GuavaCacheLoader());
 
 
