@@ -16,12 +16,15 @@ public class GuavaCacheServiceTest {
     private LoadingCache<Integer, String> loadingCache;
     private Cache<Integer, String> loadingCacheByCallable;
 
+    private LoadingCache<Integer, String> asyncLoadingCache;
+
 
     @Before
     public void init() {
         GuavaCacheService guavaCacheService = new GuavaCacheService();
         loadingCache = guavaCacheService.getLoadingCache();
         loadingCacheByCallable = guavaCacheService.getLoadingCacheByCallback();
+        asyncLoadingCache = guavaCacheService.getAsyncLoadingCache();
     }
 
 
@@ -48,6 +51,32 @@ public class GuavaCacheServiceTest {
             });
             log.info("key:{},value:{}", key, value);
         } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Test
+    public void test_reload_value() {
+        asyncLoadingCache.put(594, "test_reload");
+        try {
+            log.info("{}:{}", 594, asyncLoadingCache.get(594));
+            TimeUnit.SECONDS.sleep(3);
+            log.info("{}:{}", 594, asyncLoadingCache.get(594));
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Test
+    public void test_refresh_value(){
+        asyncLoadingCache.put(594, "test_refresh");
+        try {
+            log.info("{}:{}", 594, asyncLoadingCache.get(594));
+            TimeUnit.SECONDS.sleep(3);
+            log.info("{}:{}", 594, asyncLoadingCache.get(594));
+        } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
